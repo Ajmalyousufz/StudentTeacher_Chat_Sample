@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,10 +49,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.nio.channels.AsynchronousChannel;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TeacherChat extends AppCompatActivity {
 
@@ -67,6 +72,7 @@ public class TeacherChat extends AppCompatActivity {
 
     TextView addStudenttxt,viewStudenttxt,userName;
     ImageView studImg;
+    CircleImageView teacherImg;
 
     Boolean isAllFabsVisible;
     Uri profImageUri;
@@ -107,6 +113,8 @@ public class TeacherChat extends AppCompatActivity {
         viewFABparent = findViewById(R.id.add_fab);
         viewAllStudent_fab = findViewById(R.id.view_all_stud_fab);
         addStudent_fab = findViewById(R.id.add_person_fab);
+        teacherImg = findViewById(R.id.circleImageView);
+        loadTeacherImage();
 
         addStudenttxt = findViewById(R.id.add_person_action_text);
         viewStudenttxt = findViewById(R.id.view_stud_action_text);
@@ -192,6 +200,7 @@ public class TeacherChat extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
         });
+
 
     }
 
@@ -362,6 +371,39 @@ public class TeacherChat extends AppCompatActivity {
                     srudentUserModelArrayList.add(srudentUserModel);
                     teacherRVAdaper.notifyDataSetChanged();
                     rvCaller();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void loadTeacherImage(){
+        DatabaseReference databaseReference1 = firebaseDatabase.getReference().child("user")
+                .child("Teacher");
+        Query orderStatusQuery = databaseReference1.orderByChild("teacher_id").equalTo(teacherUId);
+
+        orderStatusQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //srudentUserModelArrayList.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                   String i = dataSnapshot.child("teacher_prof_img_uri").getValue().toString();
+                    Picasso.get().load(i).into(teacherImg, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error Loading Teacher Profile Image "+e.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.d("PR",e.getMessage());
+                        }
+                    });
                 }
             }
 
