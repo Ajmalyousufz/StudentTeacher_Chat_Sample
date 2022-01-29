@@ -4,6 +4,7 @@ public class SrudentUserModel {
 
         String student_id;
         String student_name;
+        String student_class;
         String student_password;
         String student_prof_img_uri;
         String teacherId;
@@ -12,13 +13,22 @@ public class SrudentUserModel {
         public SrudentUserModel() {
         }
 
-        public SrudentUserModel(String student_id, String student_name, String student_password, String student_prof_img_uri, String teacherId, String userType) {
+        public SrudentUserModel(String student_id, String student_name, String student_password, String student_prof_img_uri, String teacherId, String userType, String studentClass) {
                 this.student_id = student_id;
                 this.student_name = student_name;
                 this.student_password = student_password;
                 this.student_prof_img_uri = student_prof_img_uri;
                 this.teacherId = teacherId;
                 this.userType = userType;
+                this.student_class = studentClass;
+        }
+
+        public String getStudent_class() {
+                return student_class;
+        }
+
+        public void setStudent_class(String student_class) {
+                this.student_class = student_class;
         }
 
         public String getStudent_id() {

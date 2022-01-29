@@ -18,6 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userNameSigned" />
+
     <!--This will be the parent Floating Action Button-->
     <!--After the implementation the Floating Action Button
         at the bottom right corner-->

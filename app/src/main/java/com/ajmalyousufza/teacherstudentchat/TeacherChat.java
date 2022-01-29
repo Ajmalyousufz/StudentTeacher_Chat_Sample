@@ -7,6 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -24,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ajmalyousufza.teacherstudentchat.Adapters.TeacherRVAdaper;
 import com.ajmalyousufza.teacherstudentchat.ModelClass.SrudentUserModel;
 import com.ajmalyousufza.teacherstudentchat.ModelClass.Users;
 import com.ajmalyousufza.teacherstudentchat.util.ImageUtils;
@@ -36,16 +39,25 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.FileNotFoundException;
 import java.nio.channels.AsynchronousChannel;
+import java.util.ArrayList;
 
 public class TeacherChat extends AppCompatActivity {
+
+    RecyclerView recyclerView;
+    TeacherRVAdaper teacherRVAdaper;
+    ArrayList<SrudentUserModel> srudentUserModelArrayList;
 
     FirebaseAuth auth1,auth2;
     FirebaseDatabase firebaseDatabase;
@@ -86,6 +98,12 @@ public class TeacherChat extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
 
+        recyclerView = findViewById(R.id.recyclerview);
+        srudentUserModelArrayList = new ArrayList<>();
+        rvCaller();
+        loadData();
+
+
         viewFABparent = findViewById(R.id.add_fab);
         viewAllStudent_fab = findViewById(R.id.view_all_stud_fab);
         addStudent_fab = findViewById(R.id.add_person_fab);
@@ -102,7 +120,9 @@ public class TeacherChat extends AppCompatActivity {
         isAllFabsVisible = false;
 
         teacherUsername = auth1.getCurrentUser().getEmail().toString();
-        userName.setText(teacherUsername);
+        String[] separated = teacherUsername.split("@");
+        String teacherUsernameSeperated = separated[0];
+        userName.setText(teacherUsernameSeperated);
 
         viewFABparent.setOnClickListener(view -> {
             if(!isAllFabsVisible){
@@ -180,9 +200,11 @@ public class TeacherChat extends AppCompatActivity {
         if(!studName.equals("") || !studPass.equals("")){
 
            String  uName = studName+"@aves.com";
+            uName = uName.replace(" ", "_");
            String userType = "Student";
             final String[] profImageUri_Str = {""};
 
+            String finalUName = uName;
             auth2.createUserWithEmailAndPassword(uName, studPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -206,7 +228,7 @@ public class TeacherChat extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Uri uri) {
                                                     profImageUri_Str[0] = uri.toString();
-                                                    SrudentUserModel users = new SrudentUserModel(auth2.getUid(),uName, studPass, profImageUri_Str[0],teacherUId,userType);
+                                                    SrudentUserModel users = new SrudentUserModel(auth2.getUid(), finalUName, studPass, profImageUri_Str[0],teacherUId,userType,studClass);
                                                     databaseReference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
@@ -237,7 +259,7 @@ public class TeacherChat extends AppCompatActivity {
 
                                 Uri profIconUri =Uri.parse( "https://firebasestorage.googleapis.com/v0/b/teacherstudentchat.appspot.com/o/profile-user.png?alt=media&token=09dba324-0a10-4f34-b97f-5f1ed32bfba7");
                                 profImageUri_Str[0] = profIconUri.toString();
-                                SrudentUserModel users = new SrudentUserModel(auth2.getUid(),uName, studPass, profImageUri_Str[0],teacherUId,userType);
+                                SrudentUserModel users = new SrudentUserModel(auth2.getUid(), finalUName, studPass, profImageUri_Str[0],teacherUId,userType,studClass);
                                 databaseReference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -318,4 +340,36 @@ public class TeacherChat extends AppCompatActivity {
         }
         return true;
     }
+
+    public void rvCaller(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        teacherRVAdaper = new TeacherRVAdaper(srudentUserModelArrayList,TeacherChat.this);
+        recyclerView.setAdapter(teacherRVAdaper);
+    }
+
+    public void loadData(){
+        srudentUserModelArrayList.clear();
+        DatabaseReference databaseReference1 = firebaseDatabase.getReference().child("user")
+                .child("Student");
+        Query orderStatusQuery = databaseReference1.orderByChild("teacherId").equalTo(teacherUId);
+
+        orderStatusQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                srudentUserModelArrayList.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    SrudentUserModel srudentUserModel = dataSnapshot.getValue(SrudentUserModel.class);
+                    srudentUserModelArrayList.add(srudentUserModel);
+                    teacherRVAdaper.notifyDataSetChanged();
+                    rvCaller();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }
