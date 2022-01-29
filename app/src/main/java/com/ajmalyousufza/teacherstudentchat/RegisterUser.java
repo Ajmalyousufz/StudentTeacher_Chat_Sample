@@ -121,7 +121,7 @@ public class RegisterUser extends AppCompatActivity {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if(task.isSuccessful()){
-                                                                    Toast.makeText(getApplicationContext(), "New Teacher Account Created Successfully", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(getApplicationContext(), "New Teacher Account Created Successfully\nName : "+uName, Toast.LENGTH_SHORT).show();
                                                                     Intent intent = new Intent(getApplicationContext(),TeacherChat.class);
                                                                     intent.putExtra("teacherUsername",uName);
                                                                     intent.putExtra("teacherUid",auth.getUid());

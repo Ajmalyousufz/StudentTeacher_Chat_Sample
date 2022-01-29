@@ -8,6 +8,16 @@
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
+    <TextView
+        android:id="@+id/userNameSigned"
+        android:text="Your name"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <!--This will be the parent Floating Action Button-->
     <!--After the implementation the Floating Action Button
         at the bottom right corner-->
