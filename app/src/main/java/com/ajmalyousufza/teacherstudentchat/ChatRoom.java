@@ -111,7 +111,7 @@ public class ChatRoom extends AppCompatActivity {
             }
         });
 
-        if(userType=="Student"){
+        if(userType.equals("Student")){
 
             DatabaseReference reference = firebaseDatabase.getReference().child("user").child(userType).child(auth.getUid());
 
@@ -124,6 +124,8 @@ public class ChatRoom extends AppCompatActivity {
                     sImage = snapshot.child("student_prof_img_uri").getValue().toString();
                     rImage = receiverImage;
 
+                    Toast.makeText(getApplicationContext(), "sImage "+sImage+"\n"+"rImage "+rImage, Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override
@@ -133,7 +135,7 @@ public class ChatRoom extends AppCompatActivity {
             });
 
         }
-        if(userType=="Teacher"){
+        if(userType.equals("Teacher")){
 
             DatabaseReference reference = firebaseDatabase.getReference().child("user").child(userType).child(auth.getUid());
 

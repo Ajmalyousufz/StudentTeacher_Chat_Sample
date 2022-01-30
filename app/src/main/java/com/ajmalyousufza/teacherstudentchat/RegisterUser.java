@@ -77,6 +77,7 @@ public class RegisterUser extends AppCompatActivity {
 
         gotosign_in.setOnClickListener(view -> {
             startActivity(new Intent(this,SignIn.class));
+            finish();
         });
 
         imageView.setOnClickListener(view -> {

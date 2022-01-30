@@ -16,6 +16,8 @@
             android:layout_margin="10dp"
             android:scaleType="centerCrop"
             android:layout_width="70dp"
+            app:civ_border_color="#467A2B"
+            app:civ_border_width="2dp"
             android:layout_height="70dp"/>
     <LinearLayout
         android:orientation="vertical"
