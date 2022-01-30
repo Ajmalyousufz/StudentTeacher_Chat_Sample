@@ -395,7 +395,7 @@ public class TeacherChat extends AppCompatActivity {
                     Picasso.get().load(i).into(teacherImg, new Callback() {
                         @Override
                         public void onSuccess() {
-                            
+
                         }
 
                         @Override

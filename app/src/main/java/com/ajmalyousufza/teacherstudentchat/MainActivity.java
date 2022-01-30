@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
+    FirebaseDatabase firebaseDatabase;
+    SharedPreferences sh;
     Button student,teacher;
 
     @Override
@@ -20,15 +23,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         auth = FirebaseAuth.getInstance();
+
+        sh = getSharedPreferences("userPrefence",MODE_PRIVATE);
+        SharedPreferences.Editor shEditor = sh.edit();
+
         student = findViewById(R.id.studentBtn);
         teacher = findViewById(R.id.teacherBtn);
 
         if(auth.getCurrentUser()!=null){
-            startActivity(new Intent(this,TeacherChat.class));
-            finish();
+
+            String userType = sh.getString("userType","");
+
+            if(userType.equals("Teacher")){
+                startActivity(new Intent(this,TeacherChat.class));
+                finish();
+            }else  if(userType.equals("Student")){
+                startActivity(new Intent(this,StudentCaht.class));
+                finish();
+            }
+
         }
 
         student.setOnClickListener(view -> {
+
+            shEditor.putString("userType","Student");
+            shEditor.apply();
+            shEditor.commit();
 
             Intent intent = new Intent(this,StudentSignIn.class);
 
@@ -39,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         teacher.setOnClickListener(view -> {
+
+            shEditor.putString("userType","Teacher");
+            shEditor.apply();
+            shEditor.commit();
 
             Intent intent = new Intent(this,RegisterUser.class);
 

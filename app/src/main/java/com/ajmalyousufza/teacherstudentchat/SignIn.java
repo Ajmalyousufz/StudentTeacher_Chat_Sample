@@ -44,12 +44,17 @@ public class SignIn extends AppCompatActivity {
                         ,password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(getApplicationContext(), "Signed In Successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(),TeacherChat.class);
-                        intent.putExtra("teacherUsername",username.getText().toString());
-                        intent.putExtra("teacherUid",auth.getUid());
-                        startActivity(intent);
-                        finish();
+                        if(task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Signed In Successfully", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), TeacherChat.class);
+                            intent.putExtra("teacherUsername", username.getText().toString());
+                            intent.putExtra("teacherUid", auth.getUid());
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "Sign in Failed! User Not Registered!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
