@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class ChatRoom extends AppCompatActivity {
     EditText bodyMessage;
     CircleImageView receiverImg;
     TextView receiverNam;
+    ProgressBar progressBar;
 
     FirebaseAuth auth;
     FirebaseDatabase firebaseDatabase;
@@ -72,6 +75,8 @@ public class ChatRoom extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(messagesAdapter);
 
+        progressBar = findViewById(R.id.progressbar);
+        progressBar.setVisibility(View.VISIBLE);
         sendMessage = findViewById(R.id.sendMessage);
         bodyMessage = findViewById(R.id.bodyMessage);
         receiverNam = findViewById(R.id.receiverName);
@@ -103,6 +108,7 @@ public class ChatRoom extends AppCompatActivity {
                     messagesModelArrayList.add(messagesModel);
                 }
                 messagesAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -119,12 +125,8 @@ public class ChatRoom extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    Toast.makeText(getApplicationContext(), "userType ; "+userType, Toast.LENGTH_SHORT).show();
-
                     sImage = snapshot.child("student_prof_img_uri").getValue().toString();
                     rImage = receiverImage;
-
-                    Toast.makeText(getApplicationContext(), "sImage "+sImage+"\n"+"rImage "+rImage, Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -142,8 +144,6 @@ public class ChatRoom extends AppCompatActivity {
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                    Toast.makeText(getApplicationContext(), "userType ; "+userType, Toast.LENGTH_SHORT).show();
 
                     sImage = snapshot.child("teacher_prof_img_uri").getValue().toString();
                     rImage = receiverImage;

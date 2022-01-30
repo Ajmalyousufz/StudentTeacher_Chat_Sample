@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class StudentCaht extends AppCompatActivity {
 
     TextView studentName;
     CircleImageView studentImage;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +65,15 @@ public class StudentCaht extends AppCompatActivity {
 
         studentName = findViewById(R.id.myProfileName);
         studentImage = findViewById(R.id.myProfileImage);
+        progressBar = findViewById(R.id.progressbar);
+        progressBar.setVisibility(View.GONE);
 
         loadData();
     }
 
     private void loadData() {
 
+        progressBar.setVisibility(View.VISIBLE);
         DatabaseReference databaseReference2 = firebaseDatabase.getReference().child("user")
                 .child("Student");
         Query orderStatusQuery = databaseReference2.orderByChild("student_id").equalTo(auth.getUid());
@@ -114,7 +120,6 @@ public class StudentCaht extends AppCompatActivity {
                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-
                                    Users users = dataSnapshot.getValue(Users.class);
                                    usersArrayList.add(users);
                                    studentRVAdapter.notifyDataSetChanged();
@@ -126,16 +131,19 @@ public class StudentCaht extends AppCompatActivity {
 
                            @Override
                            public void onCancelled(@NonNull DatabaseError error) {
+                               progressBar.setVisibility(View.GONE);
                                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                            }
                        });
 
                    }
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Error : "+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -161,6 +169,7 @@ public class StudentCaht extends AppCompatActivity {
             case R.id.logout:
                 auth.signOut();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
                 return true;
         }
         return true;

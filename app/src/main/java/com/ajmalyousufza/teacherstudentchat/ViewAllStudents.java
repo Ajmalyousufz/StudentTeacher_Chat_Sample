@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.ajmalyousufza.teacherstudentchat.Adapters.StudentRVAdapter;
 import com.ajmalyousufza.teacherstudentchat.Adapters.TeacherRVAdaper;
@@ -29,6 +31,8 @@ public class ViewAllStudents extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase firebaseDatabase;
 
+    ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class ViewAllStudents extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview);
         srudentUserModelArrayList = new ArrayList<>();
         teacherRVAdaper = new TeacherRVAdaper(srudentUserModelArrayList,this);
+
+        progressBar = findViewById(R.id.progressbar);
+        progressBar.setVisibility(View.VISIBLE);
 
         rvcaller();
         loadData();
@@ -62,11 +69,12 @@ public class ViewAllStudents extends AppCompatActivity {
                     teacherRVAdaper.notifyDataSetChanged();
                 }
                 rvcaller();
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

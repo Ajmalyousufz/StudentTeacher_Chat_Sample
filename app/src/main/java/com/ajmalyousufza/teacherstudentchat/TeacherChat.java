@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,7 @@ public class TeacherChat extends AppCompatActivity {
     TextView addStudenttxt,viewStudenttxt,userName;
     ImageView studImg;
     CircleImageView teacherImg;
+    ProgressBar progressBar;
 
     Boolean isAllFabsVisible;
     Uri profImageUri;
@@ -112,6 +114,8 @@ public class TeacherChat extends AppCompatActivity {
         loadData();
 
 
+        progressBar = findViewById(R.id.progressbar);
+        progressBar.setVisibility(View.VISIBLE);
         viewFABparent = findViewById(R.id.add_fab);
         viewAllStudent_fab = findViewById(R.id.view_all_stud_fab);
         addStudent_fab = findViewById(R.id.add_person_fab);
@@ -194,7 +198,7 @@ public class TeacherChat extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // send data from the
                                     // AlertDialog to the Activity
-
+                                    progressBar.setVisibility(View.VISIBLE);
                                     sendDialogDataToActivity(studName.getText().toString(),studPass.getText().toString()
                                     ,studClass.getText().toString(),imageString);
                                 }
@@ -244,10 +248,12 @@ public class TeacherChat extends AppCompatActivity {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if(task.isSuccessful()){
+                                                                progressBar.setVisibility(View.GONE);
                                                                 Toast.makeText(getApplicationContext(), "New Student Account Created Successfully", Toast.LENGTH_SHORT).show();
                                                                 auth2.signOut();
                                                             }
                                                             else {
+                                                                progressBar.setVisibility(View.GONE);
                                                                 Toast.makeText(getApplicationContext(), "New Student Account Creation Failed", Toast.LENGTH_SHORT).show();
                                                             }
                                                         }
@@ -256,11 +262,13 @@ public class TeacherChat extends AppCompatActivity {
                                             }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
+                                                    progressBar.setVisibility(View.GONE);
                                                     Toast.makeText(getApplicationContext(), "Error "+e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                         }
                                         else {
+                                            progressBar.setVisibility(View.GONE);
                                             Toast.makeText(getApplicationContext(), "Task error", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -275,10 +283,12 @@ public class TeacherChat extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
+                                            progressBar.setVisibility(View.GONE);
                                             Toast.makeText(getApplicationContext(), "New Student Account Created Successfully", Toast.LENGTH_SHORT).show();
 
                                         }
                                         else {
+                                            progressBar.setVisibility(View.GONE);
                                             Toast.makeText(getApplicationContext(), "New Student Account Creation Failed", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -286,6 +296,7 @@ public class TeacherChat extends AppCompatActivity {
                                  }
 
                         }else {
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), "Error user not created", Toast.LENGTH_SHORT).show();
                         }
 
@@ -293,6 +304,7 @@ public class TeacherChat extends AppCompatActivity {
 
                     }
                     else {
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(), "Task Error or User Exists", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -347,6 +359,7 @@ public class TeacherChat extends AppCompatActivity {
             case R.id.logout:
                 auth1.signOut();
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                finish();
                 return true;
         }
         return true;
@@ -374,6 +387,7 @@ public class TeacherChat extends AppCompatActivity {
                     teacherRVAdaper.notifyDataSetChanged();
                     rvCaller();
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override

@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +24,7 @@ public class SignIn extends AppCompatActivity {
     Button signIn;
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth auth;
+    ProgressBar progressBar;
 
     String userTyp;
 
@@ -36,8 +39,10 @@ public class SignIn extends AppCompatActivity {
         username =findViewById(R.id.username);
         password = findViewById(R.id.password);
         signIn = findViewById(R.id.signInButton);
+        progressBar = findViewById(R.id.progressbar);
 
         signIn.setOnClickListener(view -> {
+            progressBar.setVisibility(View.VISIBLE);
             if(!TextUtils.isEmpty(username.getText())||!TextUtils.isEmpty(password.getText())){
 
                 auth.signInWithEmailAndPassword(username.getText().toString()+"@aves.com"
@@ -45,6 +50,7 @@ public class SignIn extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), "Signed In Successfully", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), TeacherChat.class);
                             intent.putExtra("teacherUsername", username.getText().toString());
@@ -53,6 +59,7 @@ public class SignIn extends AppCompatActivity {
                             finish();
                         }
                         else {
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), "Sign in Failed! User Not Registered!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -60,6 +67,7 @@ public class SignIn extends AppCompatActivity {
 
             }
             else {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Enter all credentials", Toast.LENGTH_SHORT).show();
             }
         });

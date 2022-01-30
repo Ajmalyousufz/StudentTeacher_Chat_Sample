@@ -15,9 +15,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class RegisterUser extends AppCompatActivity {
     EditText username,password;
     Button signUp;
     TextView gotosign_in;
+    ProgressBar progressBar;
 
     FirebaseAuth auth;
     FirebaseDatabase firebaseDatabase;
@@ -70,6 +73,7 @@ public class RegisterUser extends AppCompatActivity {
         password = findViewById(R.id.password);
         signUp = findViewById(R.id.signInButton);
         gotosign_in = findViewById(R.id.alreadyuser);
+        progressBar = findViewById(R.id.progressbar);
 
         auth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -89,6 +93,7 @@ public class RegisterUser extends AppCompatActivity {
 
         signUp.setOnClickListener(view -> {
 
+            progressBar.setVisibility(View.VISIBLE);
             if(username.getText()!=null||password.getText()!=null){
                 uName = username.getText().toString()+"@aves.com";
                 uPass = password.getText().toString();
@@ -122,6 +127,7 @@ public class RegisterUser extends AppCompatActivity {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if(task.isSuccessful()){
+                                                                    progressBar.setVisibility(View.GONE);
                                                                     Toast.makeText(getApplicationContext(), "New Teacher Account Created Successfully\nName : "+uName, Toast.LENGTH_SHORT).show();
                                                                     Intent intent = new Intent(getApplicationContext(),TeacherChat.class);
                                                                     intent.putExtra("teacherUsername",uName);
@@ -130,6 +136,7 @@ public class RegisterUser extends AppCompatActivity {
                                                                     finish();
                                                                 }
                                                                 else {
+                                                                    progressBar.setVisibility(View.GONE);
                                                                     Toast.makeText(getApplicationContext(), "New Teacher Account Creation Failed", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
@@ -138,6 +145,7 @@ public class RegisterUser extends AppCompatActivity {
                                                 }).addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
+                                                        progressBar.setVisibility(View.GONE);
                                                         Toast.makeText(getApplicationContext(), "Error "+e.getMessage(), Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
@@ -150,6 +158,7 @@ public class RegisterUser extends AppCompatActivity {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if(task.isSuccessful()){
+                                                            progressBar.setVisibility(View.GONE);
                                                             Toast.makeText(getApplicationContext(), "New Teacher Account Created Successfully", Toast.LENGTH_SHORT).show();
                                                             Intent intent = new Intent(getApplicationContext(),TeacherChat.class);
                                                             intent.putExtra("teacherUsername",uName);
@@ -158,6 +167,7 @@ public class RegisterUser extends AppCompatActivity {
                                                             finish();
                                                         }
                                                         else {
+                                                            progressBar.setVisibility(View.GONE);
                                                             Toast.makeText(getApplicationContext(), "New Teacher Account Creation Failed", Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
@@ -167,10 +177,12 @@ public class RegisterUser extends AppCompatActivity {
                                     });
                                 }
                                 else {
+                                    progressBar.setVisibility(View.GONE);
                                     Toast.makeText(getApplicationContext(), "Uplaod image!", Toast.LENGTH_SHORT).show();
                                 }
 
                             }else {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "error user not created", Toast.LENGTH_SHORT).show();
                             }
 
@@ -178,6 +190,7 @@ public class RegisterUser extends AppCompatActivity {
 
                         }
                         else {
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), "Task Error", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -188,6 +201,7 @@ public class RegisterUser extends AppCompatActivity {
 
             }
             else {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Enter username and password", Toast.LENGTH_SHORT).show();
             }
 
