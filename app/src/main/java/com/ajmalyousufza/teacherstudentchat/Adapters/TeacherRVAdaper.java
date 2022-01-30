@@ -1,6 +1,7 @@
 package com.ajmalyousufza.teacherstudentchat.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ajmalyousufza.teacherstudentchat.ChatRoom;
 import com.ajmalyousufza.teacherstudentchat.ModelClass.SrudentUserModel;
 import com.ajmalyousufza.teacherstudentchat.R;
 import com.squareup.picasso.Callback;
@@ -58,6 +60,16 @@ public class TeacherRVAdaper extends RecyclerView.Adapter<TeacherRVAdaper.ViewHo
             public void onError(Exception e) {
 
             }
+        });
+
+        String finalTeacherUsernameSeperated = teacherUsernameSeperated;
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ChatRoom.class);
+            intent.putExtra("receiverName", finalTeacherUsernameSeperated);
+            intent.putExtra("receiverImage",srudentUserModelslist.get(position).getStudent_prof_img_uri());
+            intent.putExtra("receiverUid",srudentUserModelslist.get(position).getStudent_id());
+            intent.putExtra("userType","Teacher");
+            context.startActivity(intent);
         });
 
     }

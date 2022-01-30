@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChatRoom">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/topLInlay"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/receiverImage"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+        <TextView
+            android:id="@+id/receiverName"
+            android:text="Receiver Name"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLInlay" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:backgroundTint="#C0CBF4"
+            app:cardCornerRadius="20dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/bodyMessage"
+                android:hint="Enter message here"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="8"
+            android:backgroundTint="@color/purple_200"
+            app:cardCornerRadius="50dp"
+            android:layout_marginEnd="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/sendMessage"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_baseline_send_24"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

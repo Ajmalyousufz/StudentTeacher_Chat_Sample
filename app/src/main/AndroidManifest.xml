@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TeacherStudentChat">
         <activity
+            android:name=".ChatRoom"
+            android:exported="false" />
+        <activity
             android:name=".ViewAllStudents"
             android:exported="false" />
         <activity
