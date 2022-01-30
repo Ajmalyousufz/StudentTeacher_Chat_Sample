@@ -22,6 +22,40 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/linlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+        <TextView
+            android:text="My Profile"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/myProfileImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"/>
+
+        <TextView
+            android:id="@+id/myProfileName"
+            android:text="Student Name : "
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
 
         android:id="@+id/recyclerview"
@@ -29,7 +63,7 @@
         android:layout_height="0dp"
         android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linlay"
         tools:layout_editor_absoluteX="5dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

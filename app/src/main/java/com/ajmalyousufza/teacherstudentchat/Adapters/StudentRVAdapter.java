@@ -45,6 +45,7 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.View
         holder.studentName.setText(studentUsernameSeperated);
         holder.studentClass.setVisibility(View.GONE);
         holder.studClass.setVisibility(View.GONE);
+        holder.teach_label.setVisibility(View.VISIBLE);
         Picasso.get().load(usersArrayList.get(position).getTeacher_prof_img_uri()).into(holder.studentImage, new Callback() {
             @Override
             public void onSuccess() {
@@ -68,7 +69,7 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView studentName,studentClass,studClass;
+        TextView studentName,studentClass,studClass,teach_label;
         ImageView studentImage;
 
         public ViewHolder(@NonNull View itemView) {
@@ -78,6 +79,7 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.View
             studentName = itemView.findViewById(R.id.prof_name_stud);
             studentImage = itemView.findViewById(R.id.prof_image_stud);
             studClass = itemView.findViewById(R.id.prof_class_stud);
+            teach_label = itemView.findViewById(R.id.teacher_label);
         }
     }
 }

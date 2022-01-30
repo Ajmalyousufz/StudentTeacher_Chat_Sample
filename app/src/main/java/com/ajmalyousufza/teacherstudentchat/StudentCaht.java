@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ajmalyousufza.teacherstudentchat.Adapters.StudentRVAdapter;
@@ -22,8 +23,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StudentCaht extends AppCompatActivity {
 
@@ -35,6 +40,9 @@ public class StudentCaht extends AppCompatActivity {
     RecyclerView recyclerView;
     StudentRVAdapter studentRVAdapter;
     ArrayList<Users> usersArrayList;
+
+    TextView studentName;
+    CircleImageView studentImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,9 @@ public class StudentCaht extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        studentName = findViewById(R.id.myProfileName);
+        studentImage = findViewById(R.id.myProfileImage);
 
         loadData();
     }
@@ -65,10 +76,32 @@ public class StudentCaht extends AppCompatActivity {
                 String teacherId = snapshot.getKey().toString();
                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
 
+                   if(dataSnapshot.child("student_name").getKey().toString().equals("student_name")){
+                       String profNam = dataSnapshot.child("student_name").getValue().toString();
+                       String[] separated = profNam.split("@");
+                       String studentUsernameSeperated = separated[0];
+                       studentUsernameSeperated = studentUsernameSeperated.replace("_", " ");
+                       studentName.setText(studentUsernameSeperated);
+                   }
+
+                   if(dataSnapshot.child("student_prof_img_uri").getKey().toString().equals("student_prof_img_uri")){
+                       Picasso.get().load(dataSnapshot.child("student_prof_img_uri").getValue().toString())
+                               .into(studentImage, new Callback() {
+                                   @Override
+                                   public void onSuccess() {
+
+                                   }
+
+                                   @Override
+                                   public void onError(Exception e) {
+
+                                   }
+                               });
+                   }
+
                    if(dataSnapshot.child("teacherId").getKey().toString().equals("teacherId")){
 
                        String teacherid = dataSnapshot.child("teacherId").getValue().toString();
-                       Toast.makeText(getApplicationContext(), teacherId, Toast.LENGTH_SHORT).show();
 
                        DatabaseReference databaseReference3 = firebaseDatabase.getReference().child("user")
                                .child("Teacher");
@@ -91,7 +124,7 @@ public class StudentCaht extends AppCompatActivity {
 
                            @Override
                            public void onCancelled(@NonNull DatabaseError error) {
-
+                               Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                            }
                        });
 
